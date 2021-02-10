@@ -10,7 +10,7 @@ float pos, posDot, angle, angleDot;
 final double cartMass=0.5;
 final double poleMass=0.1;
 final double poleLength=90.0; ;
-final double forceMag=15.0;
+final double forceMag=20.0;
 final double tau=0.09;
 final double fricCart=0.00005;
 final double fricPole=0.005;
@@ -66,7 +66,7 @@ public void draw(){
                 - fricPole * angleDot / poleMassLength) /
                   (halfPole * (fourthirds - poleMass * cosangle * cosangle /
                   totalMass));
-  double posDDot = common - poleMassLength * angleDDot * cosangle /
+  double posDDot = (common - poleMassLength * angleDDot * cosangle) /
                  totalMass;
 
   // Update the new state
@@ -75,7 +75,12 @@ public void draw(){
   angle += angleDot * tau;
   angleDot += angleDDot * tau;
           
-  // Apply appropriate action to the cart
+  // This conditional block looks at the current angle
+  // and aangular velocity and makes a very crude decision
+  // to apply a positive or negative force to the cart.
+  // This conditional block could be replace with a more
+  // sophisticated decision making process such as a Fuzzy Logic
+  // controller or a Neural Network.
   if (angle < 0 && angleDot < 0)
     action = -1;
   else if (angle > 0 && angleDot > 0)
